@@ -1,0 +1,19 @@
+---
+
+galaxy_info:
+  author: Michal Kubenka
+  description: A simple service to config docker storage.
+  company: SAGES, s.r.o.
+  license: BSD
+  min_ansible_version: 2.1
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Amazon
+      versions:
+        - all
+  galaxy_tags:
+    - docker
+
+dependencies: []

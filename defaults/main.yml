@@ -1,0 +1,6 @@
+---
+
+docker_storage_setup_version: '0.5-0.git95194cb'
+
+docker_storage_setup_devs: []
+docker_storage_setup_vg_name: 'docker'

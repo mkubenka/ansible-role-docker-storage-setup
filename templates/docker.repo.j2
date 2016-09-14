@@ -1,0 +1,6 @@
+[docker-{{ docker_repo }}-repo]
+name=Docker {{ docker_repo }} Repository
+baseurl=https://yum.dockerproject.org/repo/{{ docker_repo }}/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg

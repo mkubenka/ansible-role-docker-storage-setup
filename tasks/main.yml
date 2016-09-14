@@ -1,0 +1,37 @@
+---
+
+- include: check_vars.yml
+
+- name: copy config
+  template:
+    src=docker-storage-setup.conf.j2
+    dest=/etc/sysconfig/docker-storage-setup
+    backup=yes
+
+- block:
+    - name: install package
+      yum: pkg={{ docker_storage_setup_rpm }} state=present
+
+    - name: start and enable service
+      service:
+        name=docker-storage-setup
+        state=started
+        enabled=yes
+
+  when: ansible_distribution == 'CentOS'
+
+- block:
+    - name: install package
+      yum: pkg=docker-storage-setup state=present
+
+    - name: run docker-storage-setup
+      command: docker-storage-setup
+      ignore_errors: true
+
+    - name: copy storage config
+      template:
+        src=docker-storage.j2
+        dest=/etc/sysconfig/docker-storage
+        backup=yes
+
+  when: ansible_distribution == 'Amazon'

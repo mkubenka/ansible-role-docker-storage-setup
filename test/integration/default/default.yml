@@ -1,0 +1,40 @@
+---
+
+- hosts: all
+
+  vars:
+    docker_storage_setup_devs:
+      - /dev/xvdh
+
+  pre_tasks:
+    - name: do not requires a TTY when using sudo
+      copy:
+        content="Defaults !requiretty\n"
+        dest="/etc/sudoers.d/cloud-init-requiretty"
+        mode=0400
+        validate="visudo -cf %s"
+
+    - name: remove SSH user from all groups
+      user:
+        name="{{ ansible_env.SUDO_USER }}"
+        groups=""
+
+  roles:
+    - role: docker-storage-setup
+
+    - { role: mkubenka.docker,
+        docker_daemon_options: {
+          storage-driver: devicemapper,
+          storage-opts: [
+            "dm.fs=xfs",
+            "dm.thinpooldev=/dev/mapper/docker-docker--pool",
+            "dm.use_deferred_removal=true",
+            "dm.use_deferred_deletion=true"
+          ]
+        },
+        when: "ansible_distribution == 'CentOS'"
+      }
+
+    - { role: mkubenka.docker,
+        when: "ansible_distribution == 'Amazon'"
+      }
